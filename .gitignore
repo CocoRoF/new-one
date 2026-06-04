@@ -1,0 +1,25 @@
+# Node
+node_modules/
+.next/
+out/
+dist/
+build/
+.turbo/
+.cache/
+
+# Env
+.env
+.env.local
+.env.*.local
+
+# Editors / OS
+.vscode/
+.idea/
+.DS_Store
+*.swp
+
+# Logs
+*.log
+npm-debug.log*
+yarn-error.log*
+pnpm-debug.log*
