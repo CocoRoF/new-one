@@ -1,7 +1,8 @@
 FROM node:20-alpine AS deps
 WORKDIR /app
-COPY package.json ./
-RUN npm install --no-package-lock
+# package-lock.json을 함께 복사해 npm ci로 재현 가능한 설치
+COPY package.json package-lock.json ./
+RUN npm ci
 
 FROM node:20-alpine AS builder
 WORKDIR /app
