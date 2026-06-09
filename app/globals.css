@@ -9,6 +9,14 @@
   --accent: #b87333;
   --card: #ffffff;
   --line: #e6e2d8;
+
+  /* Pre-computed alpha variants.
+     Tailwind's `bg-[var(--x)]/N` shorthand does NOT work with hex CSS vars,
+     so we expose ready-to-use rgba() values for translucent surfaces. */
+  --bg-90: rgba(247, 245, 240, 0.9);
+  --ink-8: rgba(31, 29, 26, 0.08);
+  --accent-8: rgba(184, 115, 51, 0.08);
+  --accent-50: rgba(184, 115, 51, 0.5);
 }
 
 * {

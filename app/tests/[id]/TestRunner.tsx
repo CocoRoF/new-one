@@ -59,7 +59,7 @@ export default function TestRunner({ testId }: { testId: string }) {
   return (
     <main className="min-h-screen flex flex-col bg-[var(--bg)]">
       {/* Top bar with progress */}
-      <div className="sticky top-0 z-10 bg-[var(--bg)]/90 backdrop-blur border-b border-[var(--line)]">
+      <div className="sticky top-0 z-10 bg-[var(--bg-90)] backdrop-blur border-b border-[var(--line)]">
         <div className="max-w-2xl mx-auto px-5 sm:px-6 py-3 flex items-center gap-4">
           {stage === "intro" ? (
             <Link
@@ -220,7 +220,7 @@ function LikertChoices({
           >
             <span
               className={`inline-flex items-center justify-center w-7 h-7 rounded-full text-[12px] tabular-nums shrink-0 border
-              ${selected ? "border-[var(--bg)]/40" : "border-[var(--line)] text-[var(--muted)]"}`}
+              ${selected ? "border-[var(--bg)] opacity-90" : "border-[var(--line)] text-[var(--muted)]"}`}
             >
               {v}
             </span>
@@ -281,18 +281,51 @@ function Result({
       <h1 className="text-2xl sm:text-3xl font-semibold leading-snug">
         {r.headline}
       </h1>
+      {r.subHeadline && (
+        <p className="mt-2 text-[14px] text-[var(--muted)]">{r.subHeadline}</p>
+      )}
 
-      <div className="mt-8 space-y-5">
+      {/* 종합 해석 */}
+      {r.summary && (
+        <div className="mt-7 bg-[var(--card)] border border-[var(--line)] rounded-2xl p-5 sm:p-6 fade-up">
+          <p className="text-[10px] tracking-[0.3em] text-[var(--muted)] mb-2">
+            OVERVIEW
+          </p>
+          <p className="text-[15px] leading-relaxed">{r.summary}</p>
+        </div>
+      )}
+
+      {/* 차원별 점수 */}
+      <h2 className="mt-10 mb-4 text-[11px] tracking-[0.3em] text-[var(--muted)]">
+        BY DIMENSION
+      </h2>
+      <div className="space-y-4">
         {r.lines.map((line, i) => {
           const ratio = Math.min(1, line.value / line.max);
+          const level = line.level;
+          const badgeColor =
+            level === "high"
+              ? "bg-[var(--accent)] text-white"
+              : level === "low"
+              ? "bg-[var(--line)] text-[var(--muted)]"
+              : "bg-[var(--ink-8)] text-[var(--ink)]";
           return (
             <div
               key={i}
               className="bg-[var(--card)] border border-[var(--line)] rounded-xl p-5 fade-up"
-              style={{ animationDelay: `${i * 80}ms` }}
+              style={{ animationDelay: `${i * 70}ms` }}
             >
-              <div className="flex justify-between items-baseline">
-                <span className="font-medium">{line.label}</span>
+              <div className="flex justify-between items-baseline gap-3 flex-wrap">
+                <div className="flex items-center gap-2">
+                  <span className="font-medium">{line.label}</span>
+                  {line.levelLabel && (
+                    <span
+                      className={`text-[11px] px-2 py-0.5 rounded-full ${badgeColor}`}
+                    >
+                      {line.levelLabel}
+                    </span>
+                  )}
+                </div>
                 <span className="text-[12px] tabular-nums text-[var(--muted)]">
                   {line.value} / {line.max}
                 </span>
@@ -303,16 +336,42 @@ function Result({
                   style={{ width: `${ratio * 100}%` }}
                 />
               </div>
-              <p className="mt-3 text-[14px] text-[var(--muted)] leading-relaxed">
-                {line.desc}
-              </p>
+              <p className="mt-3 text-[14px] leading-relaxed">{line.desc}</p>
+              {line.detail && (
+                <p className="mt-2 text-[13px] text-[var(--muted)] leading-relaxed">
+                  {line.detail}
+                </p>
+              )}
             </div>
           );
         })}
       </div>
 
+      {/* 인사이트 카드 */}
+      {r.insights && r.insights.length > 0 && (
+        <>
+          <h2 className="mt-10 mb-4 text-[11px] tracking-[0.3em] text-[var(--muted)]">
+            INSIGHTS
+          </h2>
+          <div className="space-y-3">
+            {r.insights.map((ins, i) => (
+              <div
+                key={i}
+                className="border-l-2 border-[var(--accent)] pl-4 py-1 fade-up"
+                style={{ animationDelay: `${i * 70}ms` }}
+              >
+                <p className="text-[13px] font-semibold mb-1">{ins.title}</p>
+                <p className="text-[14px] text-[var(--muted)] leading-relaxed">
+                  {ins.body}
+                </p>
+              </div>
+            ))}
+          </div>
+        </>
+      )}
+
       {r.closing && (
-        <p className="mt-8 text-[14px] text-[var(--muted)] leading-relaxed">
+        <p className="mt-10 text-[13px] text-[var(--muted)] leading-relaxed italic">
           {r.closing}
         </p>
       )}

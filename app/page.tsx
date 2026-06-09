@@ -9,7 +9,7 @@ export default function Home() {
           A QUIET PSYCHOLOGY ROOM
         </p>
         <h1 className="text-3xl sm:text-4xl font-semibold leading-snug">
-          마음 한 조각,
+          마음 세 조각,
           <br />
           가볍게 함께 보는 검사들
         </h1>
